@@ -1,127 +1,74 @@
-# Economy Bot Discord
+# 📙Quickstart
 
-### • Supports [py-cord](https://github.com/Pycord-Development/pycord), [discord.py](https://github.com/Rapptz/discord.py), [nextcord](https://github.com/nextcord/nextcord)
+# Method - 1
 
-#### • In this project you will find different code examples of economy bot with various databases.
+## clone the repository
 
-#### • This module makes the process a lot easier !
+```sh
+git clone https://github.com/Modern-Realm/economy-bot-discord.py
+```
 
-[![python badge](http://ForTheBadge.com/images/badges/made-with-python.svg)](https://www.python.org/ "Python")
+## Setting up the working directory & installing packages
 
-[![CodeQL](https://github.com/Modern-Realm/economy-bot-discord.py/actions/workflows/codeql.yml/badge.svg)](https://github.com/Modern-Realm/economy-bot-discord.py/actions/workflows/codeql.yml)
-[![Generic badge](https://img.shields.io/badge/Python-3.8-blue.svg)](https://www.python.org/)
-![Github License](https://img.shields.io/badge/license-MIT-blue)
-![Windows](https://img.shields.io/badge/os-windows-yellow)
-![Linux](https://img.shields.io/badge/os-linux-yellow)
+```sh
+cd "economy-bot-discord.py/economy with SQLITE3"
+pip install -r requirements.txt
+```
 
-### Join [Official Discord Server](https://discord.gg/GVMWx5EaAN  "click to Join") for more guidance !
+**Note:** make sure to install **any one** of these package`(discord.py, py-cord or nextcord)`
 
-<hr/>
-
-## Table of Contents
-
-#### • [Economy with MySQL](https://github.com/Modern-Realm/economy-bot-discord.py/tree/main/economy%20with%20MYSQL)
-
-#### • [Economy with SQLite3](https://github.com/Modern-Realm/economy-bot-discord.py/tree/main/economy%20with%20SQLITE3)
-
-#### • [Economy with AioSQLite](https://github.com/Modern-Realm/economy-bot-discord.py/tree/main/economy%20with%20aiosqlite)
-
-#### • [Economy with MongoDB](https://github.com/Modern-Realm/economy-bot-discord.py/tree/main/economy%20with%20mongoDB)
-
-<br/>
-
-To create a Discord bot using **discord.js**, go
-to [economy-bot-discord.js](https://github.com/Modern-Realm/economy-bot-discord.js)
-
-<hr/>
-
-## Thanking JetBrains for Their Support and Assistance
-
-<div align="center">
-
-<img width="90px" height="80px" alt="JetBrains Logo" src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.png"/>
-
-<a href="https://jb.gg/OpenSourceSupport">jetbrains.com</a>
-Once again thank you 💝 for providing me free OSS License.
-
-These IDE(s) made things a lot easier for us:
-
-• <img height="14px" width="16px" alt="WebStorm logo." src="https://resources.jetbrains.com/storage/products/company/brand/logos/WebStorm_icon.png"/>
-**WebStorm** - The smartest JavaScript IDE
-
-• <img height="14px" width="16px" alt="PyCharm logo." src="https://resources.jetbrains.com/storage/products/company/brand/logos/PyCharm_icon.png">
-**PyCharm Professional** - Python IDE for professional developers
-
-</div>
-
-<hr/>
+### Provide the secret keys/values in `.env` file
 
 ## Running the bot
 
-Follow the instructions provided in `README.md` file in each of the database directories.
-`Like: economy with SQLITE3`
+```sh
+python main.py
+```
 
-<hr/>
+🎉 Your discord bot should be online and ready to use!
 
-## List of Bot Commands
+# Method - 2
 
-**`$`** is the default **command prefix**
+## Download the source file
 
-### • Bank commands
+- [click here](https://github.com/Modern-Realm/economy-bot-discord.py/releases/download/v3.0.7/economy.with.SQLITE3.zip)
+to download the `zip` file.
+- extract all the files & folders
 
-|    Name     | Aliases |      Args      |           Usage           |
-|:-----------:|:-------:|:--------------:|:-------------------------:|
-|   balance   |   bal   |     member     | `$bal <member: optional>` |
-|   deposit   |   dep   |     amount     |      `$dep <amount>`      |
-|  withdraw   |  with   |     amount     |     `$with <amount>`      |
-|    send     |   ---   | member, amount | `$send <member> <amount>` |
-| leaderboard |   lb    |      None      |          `$lb `           |
+## Install required packages
 
-### • Shop commands
+```shell
+pip install -r requirements.txt
+```
 
-|   Name    | Aliases |   Args    |           Usage           |
-|:---------:|:-------:|:---------:|:-------------------------:|
-|   shop    |   ---   |   None    |         ` $shop `         |
-| shop info |   ---   | item_name |   ` $shop <item name>`    |
-|    buy    |   ---   | item_name |    `$buy <item name>`     |
-|   sell    |   ---   | item_name |    `$sell <item name>`    |
-| inventory |   inv   |  member   | `$inv <member: optional>` |
+**Note:** make sure to install **any one** of these package`(discord.py, py-cord or nextcord)`
 
-### • Economy commands
+## Running the bot
 
-|  Name   | Aliases | Args |   Usage    | Cooldown (in days) |
-|:-------:|:-------:|:----:|:----------:|:------------------:|
-|  daily  |   ---   | None |  `$daily`  |         1          |
-| weekly  |   ---   | None | `$weekly`  |         7          |
-| monthly |   ---   | None | `$monthly` |         30         |
+```shell
+python main.py
+```
 
-### • Admin commands ![Generic badge](https://img.shields.io/badge/new-gold)
+🎉 Your discord bot should be online and ready to use!
 
-|     Name     | Aliases  |         Args         |                     Usage                      |
-|:------------:|:--------:|:--------------------:|:----------------------------------------------:|
-|  add_money   | addmoney | member, amount, mode | `$addmoney <member> <amount> <mode: optional>` |
-| remove_money | remoney  | member, amount, mode | `$remoney <member> <amount> <mode: optional>`  |
-|  reset_user  |   ---    |        member        |             `$reset_user <member>`             |
+---
 
-**Note:**
-If your bot is not intended for public use`(personal bot)` and is only meant to be used on one or two servers that you
-own,
-you can add these admin commands.
-However, if your bot is publicly available for anyone to add to their server,
-it is not recommended to include these admin commands.
+# Note: for discord.py users
 
-### • Fun commands
+**You can just clone [`branch:alpha`](https://github.com/Modern-Realm/economy-bot-discord.py/tree/alpha)**
 
-|   Name    |   Aliases    |      Args      |                Usage                |
-|:---------:|:------------:|:--------------:|:-----------------------------------:|
-| coin_flip | cf, coinflip | bet_on, amount |       `$cf <bet_on> <amount>`       |
-|   slots   |     ---      |     amount     |          `$slots <amount>`          |
-|   dice    |     ---      | amount, bet_on | `$dice <amount> <bet_on: optional>` |
+```sh
+git clone --single-branch -b alpha https://github.com/Modern-Realm/economy-bot-discord.py
+```
 
-New bot commands will be added shortly ...
+**Or make some changes:**
 
-<hr/>
+- In `main.py`
 
-## Contact Us
+  Make sure to uncomment the code where it has `await client.load_extension(...)`.
 
-- [Discord](https://discord.gg/GVMWx5EaAN) • [Github](https://github.com/skrphenix) • [Gmail](mailto:saikeerthan.keerthan.9@gmail.com)
+- In all `*.py` files in `cogs` folder
+
+  Make sure to uncomment the code where the `setup(client)` is asynchronous
+
+  i.e `async def setup(client)`
