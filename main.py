@@ -30,7 +30,7 @@ async def on_ready():
         )
     """)
     await bot.db.commit()
-
+    await bot.db.execute("CREATE TABLE IF NOT EXISTS inventory (user_id INTEGER, item_name TEXT)")
     # تحميل ملفات الأوامر (Cogs)
     for filename in os.listdir('./cogs'):
         if filename.endswith('.py'):
