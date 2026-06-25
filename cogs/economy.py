@@ -138,6 +138,32 @@ class Economy(commands.Cog):
         embed.set_thumbnail(url="https://cdn-icons-png.flaticon.com/512/2830/2830284.png") # أيقونة تاج وثروة
         
         await ctx.send(embed=embed)
+        # 3. أمر كشف (الملف الشخصي) - أضف هذا تحت أمر التوب مباشرة
+    @commands.command(name="كشف")
+    async def profile(self, ctx):
+        wallet, bank, gold, job = await self.get_user(ctx.author.id)
+        
+        embed = discord.Embed(title=f"👤 الملف الشخصي | {ctx.author.display_name}", color=0x000000)
+        embed.set_thumbnail(url=ctx.author.display_avatar.url)
+        
+        embed.add_field(name="الوظيفة", value=f"💼 {job}", inline=True)
+        embed.add_field(name="المحفظة", value=f"💵 {wallet:,}", inline=True)
+        embed.add_field(name="البنك", value=f"🏦 {bank:,}", inline=True)
+        embed.add_field(name="الذهب", value=f"🪙 {gold:,}", inline=True)
+        
+        await ctx.send(embed=embed)
+
+    # 4. أمر رصيد - أضف هذا أيضاً
+    @commands.command(name="رصيد")
+    async def balance(self, ctx):
+        wallet, bank, gold, _ = await self.get_user(ctx.author.id)
+        
+        embed = discord.Embed(title=f"💳 رصيد {ctx.author.display_name}", color=0x000000)
+        embed.add_field(name="المحفظة", value=f"💵 {wallet:,}", inline=True)
+        embed.add_field(name="البنك", value=f"🏦 {bank:,}", inline=True)
+        embed.add_field(name="الذهب", value=f"🪙 {gold:,}", inline=True)
+            
+        await ctx.send(embed=embed)
 
 async def setup(bot):
     await bot.add_cog(Economy(bot))
