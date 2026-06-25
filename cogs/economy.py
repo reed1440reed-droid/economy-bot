@@ -141,18 +141,41 @@ class Economy(commands.Cog):
         # 3. أمر كشف (الملف الشخصي) - أضف هذا تحت أمر التوب مباشرة
     @commands.command(name="كشف")
     async def profile(self, ctx):
-        wallet, bank, gold, job = await self.get_user(ctx.author.id)
+        # جلب البيانات من القاعدة
+        # ملاحظة: إذا لم تكن السرقات موجودة في القاعدة، أضفها عبر ALTER TABLE
+        try:
+            await self.bot.db.execute("ALTER TABLE users ADD COLUMN robberies INTEGER DEFAULT 0")
+            await self.bot.db.commit()
+        except:
+            pass
+            
+        cursor = await self.bot.db.execute("SELECT wallet, bank, gold, job, robberies FROM users WHERE user_id = ?", (ctx.author.id,))
+        row = await cursor.fetchone()
         
-        embed = discord.Embed(title=f"👤 الملف الشخصي | {ctx.author.display_name}", color=0x000000)
+        # إذا لم يكن موجوداً، ننشئ بياناته
+        if not row:
+            wallet, bank, gold, job, robberies = (0, 0, 0, 'عاطل', 0)
+        else:
+            wallet, bank, gold, job, robberies = row
+
+        # تحديد الحالة الاجتماعية (يمكن ربطها لاحقاً بنظام زواج)
+        social_status = "عازب 👤" 
+
+        embed = discord.Embed(title=f"📋 بطاقة الهوية | {ctx.author.display_name}", color=0x000000)
         embed.set_thumbnail(url=ctx.author.display_avatar.url)
         
-        embed.add_field(name="الوظيفة", value=f"💼 {job}", inline=True)
-        embed.add_field(name="المحفظة", value=f"💵 {wallet:,}", inline=True)
-        embed.add_field(name="البنك", value=f"🏦 {bank:,}", inline=True)
-        embed.add_field(name="الذهب", value=f"🪙 {gold:,}", inline=True)
+        # تنسيق البيانات
+        embed.add_field(name="المهنة", value=f"💼 `{job}`", inline=True)
+        embed.add_field(name="الحالة الاجتماعية", value=f"💍 `{social_status}`", inline=True)
+        embed.add_field(name="سجل السرقات", value=f"🥷 `{robberies} عملية ناجحة`", inline=True)
+        
+        embed.add_field(name="المحفظة", value=f"💵 `{wallet:,}`", inline=True)
+        embed.add_field(name="البنك", value=f"🏦 `{bank:,}`", inline=True)
+        embed.add_field(name="الذهب", value=f"🪙 `{gold:,}`", inline=True)
+        
+        embed.set_footer(text="نظام البنك العملاق | إحصائيات اللاعب")
         
         await ctx.send(embed=embed)
-
     # 4. أمر رصيد - أضف هذا أيضاً
     @commands.command(name="رصيد")
     async def balance(self, ctx):
