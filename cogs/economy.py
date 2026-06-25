@@ -141,37 +141,33 @@ class Economy(commands.Cog):
         # 3. أمر كشف (الملف الشخصي) - أضف هذا تحت أمر التوب مباشرة
     @commands.command(name="كشف")
     async def profile(self, ctx):
-        # جلب البيانات من القاعدة
-        # ملاحظة: إذا لم تكن السرقات موجودة في القاعدة، أضفها عبر ALTER TABLE
-        try:
-            await self.bot.db.execute("ALTER TABLE users ADD COLUMN robberies INTEGER DEFAULT 0")
-            await self.bot.db.commit()
-        except:
-            pass
-            
+        # 1. جلب البيانات الأساسية والوظيفة والسرقات
         cursor = await self.bot.db.execute("SELECT wallet, bank, gold, job, robberies FROM users WHERE user_id = ?", (ctx.author.id,))
         row = await cursor.fetchone()
         
-        # إذا لم يكن موجوداً، ننشئ بياناته
-        if not row:
-            wallet, bank, gold, job, robberies = (0, 0, 0, 'عاطل', 0)
-        else:
-            wallet, bank, gold, job, robberies = row
+        wallet, bank, gold, job, robberies = row if row else (0, 0, 0, 'عاطل', 0)
 
-        # تحديد الحالة الاجتماعية (يمكن ربطها لاحقاً بنظام زواج)
-        social_status = "عازب 👤" 
+        # 2. جلب الممتلكات من جدول inventory
+        cursor_inv = await self.bot.db.execute("SELECT item_name FROM inventory WHERE user_id = ?", (ctx.author.id,))
+        items = await cursor_inv.fetchall()
+        
+        # تحويل القائمة من [('سيارة',), ('بيت',)] إلى نص منظم
+        inventory_list = ", ".join([i[0] for i in items]) if items else "لا يملك ممتلكات 🏠"
 
+        # 3. بناء الإمبد
         embed = discord.Embed(title=f"📋 بطاقة الهوية | {ctx.author.display_name}", color=0x000000)
         embed.set_thumbnail(url=ctx.author.display_avatar.url)
         
-        # تنسيق البيانات
         embed.add_field(name="المهنة", value=f"💼 `{job}`", inline=True)
-        embed.add_field(name="الحالة الاجتماعية", value=f"💍 `{social_status}`", inline=True)
         embed.add_field(name="سجل السرقات", value=f"🥷 `{robberies} عملية ناجحة`", inline=True)
+        embed.add_field(name="الحالة الاجتماعية", value=f"💍 `عازب`", inline=True)
         
         embed.add_field(name="المحفظة", value=f"💵 `{wallet:,}`", inline=True)
         embed.add_field(name="البنك", value=f"🏦 `{bank:,}`", inline=True)
         embed.add_field(name="الذهب", value=f"🪙 `{gold:,}`", inline=True)
+        
+        # إضافة قائمة الممتلكات
+        embed.add_field(name="الممتلكات والعقارات", value=f"🏢 {inventory_list}", inline=False)
         
         embed.set_footer(text="نظام البنك العملاق | إحصائيات اللاعب")
         
