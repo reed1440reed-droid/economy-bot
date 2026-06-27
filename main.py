@@ -21,8 +21,16 @@ async def on_ready():
     
     # تحديث أوامر السلاش (Slash Commands)
     try:
-        synced = await bot.tree.sync()
-        print(f"♻️ تم عمل Sync لـ {len(synced)} أمر بنجاح!")
+        # 1. تحديث الأوامر العامة (تأخذ وقت لتظهر في كل السيرفرات)
+        synced_global = await bot.tree.sync()
+        print(f"🌍 تم عمل Sync لـ {len(synced_global)} أمر عام بنجاح!")
+
+        # 2. تحديث أوامر السيرفر المخصص (تظهر فوراً)
+        # ⚠️ استبدل الرقم بآيدي سيرفرك (نفس اللي حطيته في كوج الإدارة)
+        MY_GUILD = discord.Object(id=1439839910172295303)
+        synced_guild = await bot.tree.sync(guild=MY_GUILD)
+        print(f"🚀 تم عمل Sync لـ {len(synced_guild)} أمر مخصص للسيرفر بنجاح!")
+
     except Exception as e:
         print(f"❌ خطأ أثناء الـ Sync: {e}")
 
