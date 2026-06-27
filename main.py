@@ -1,39 +1,58 @@
 import discord
 from discord.ext import commands
-import aiosqlite
 import os
+import asyncio
 from dotenv import load_dotenv
 
+# تحميل المتغيرات البيئية من ملف .env (لإخفاء التوكن)
 load_dotenv()
 
-intents = discord.Intents.default()
-intents.message_content = True
-bot = commands.Bot(command_prefix='!', intents=intents)
+# إعداد الصلاحيات (Intents) للتحكم الكامل
+intents = discord.Intents.all()
 
-@bot.event
-async def on_message(message):
-    if message.author.bot: return
-    
-    # قائمة الأوامر المتاحة بدون برفكس
-    commands_list = ["كشف", "توب", "راتب", "رصيد", "أسعار", "شراء", "بيع", "هدية"]
-    
-    if message.content.strip() in commands_list:
-        ctx = await bot.get_context(message)
-        command = bot.get_command(message.content.strip())
-        if command:
-            await bot.invoke(ctx)
-            return
+# إنشاء كائن البوت
+bot = commands.Bot(command_prefix="!", intents=intents)
 
-    await bot.process_commands(message)
-
-# (بقية كود الـ on_ready لتحميل الـ Cogs وإنشاء الجداول كما فعلنا سابقاً)
 @bot.event
 async def on_ready():
-    bot.db = await aiosqlite.connect("database.db")
-    # ... (كود إنشاء الجداول الذي كتبناه سابقاً)
-    for filename in os.listdir('./cogs'):
-        if filename.endswith('.py'):
-            await bot.load_extension(f'cogs.{filename[:-3]}')
-    print(f'Bot is online as {bot.user.name}')
+    print(f'🔥 تم تشغيل البوت بنجاح باسم: {bot.user.name}')
+    print(f'🆔 معرف البوت: {bot.user.id}')
+    print('-----------------------------------------')
+    
+    # تحديث أوامر السلاش (Slash Commands)
+    try:
+        synced = await bot.tree.sync()
+        print(f"♻️ تم عمل Sync لـ {len(synced)} أمر بنجاح!")
+    except Exception as e:
+        print(f"❌ خطأ أثناء الـ Sync: {e}")
 
-bot.run(os.getenv('DISCORD_TOKEN'))
+# دالة لتحميل الكوجات تلقائياً
+async def load_extensions():
+    # يبحث داخل مجلد cogs
+    for filename in os.listdir('./cogs'):
+        # الشرط: يحمل فقط الملفات التي تنتهي بـ _cog.py
+        if filename.endswith('_cog.py'):
+            # يزيل آخر 3 أحرف (.py) لاستيراد الوحدة البرمجية بشكل صحيح
+            extension_name = f'cogs.{filename[:-3]}'
+            try:
+                await bot.load_extension(extension_name)
+                print(f'📦 تم تحميل الكوج: {filename}')
+            except Exception as e:
+                print(f'⚠️ فشل تحميل {filename}:\n{e}')
+
+async def main():
+    async with bot:
+        # تحميل جميع الأوامر والملفات قبل تشغيل البوت
+        await load_extensions()
+        
+        # استدعاء التوكن من ملف .env بأمان
+        token = os.getenv("BOT_TOKEN")
+        if token is None:
+            print("❌ لم يتم العثور على التوكن! تأكد من إضافته في ملف .env")
+            return
+            
+        await bot.start(token)
+
+if __name__ == "__main__":
+    # تشغيل النظام الأساسي
+    asyncio.run(main())
