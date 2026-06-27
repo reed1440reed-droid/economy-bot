@@ -20,7 +20,7 @@ class AdminTicketSelect(discord.ui.Select):
             discord.SelectOption(label="تذكير العضو", emoji="🔔", value="remind"),
             discord.SelectOption(label="عدم استجابة", emoji="⚠️", value="no_response"),
             discord.SelectOption(label="إغلاق التذكرة", emoji="🔒", value="close"),
-            discord.SelectOption(label="حذف التذكرة (مع الترانسكربت)", emoji="🗑️", value="delete")
+            discord.SelectOption(label="حذف التذكرة", emoji="🗑️", value="delete")
         ]
         super().__init__(placeholder="🛠️ لوحة تحكم الإدارة...", min_values=1, max_values=1, options=options, custom_id="admin_ticket_select")
 
@@ -162,7 +162,7 @@ class TicketSelect(discord.ui.Select):
 
         # رسالة الترحيب ومنشن العضو والإدارة
         welcome_embed = discord.Embed(
-            title="🎫 تذكرة جديدة",
+            title="مرحبا بك ",
             description=f"أهلاً بك {interaction.user.mention} في تذكرتك.\nنرجو منك كتابة تفاصيل مشكلتك بوضوح والانتظار حتى يتم الرد عليك من قِبل {admin_role.mention}.",
             color=discord.Color.blue()
         )
@@ -193,7 +193,7 @@ class TicketSystem(commands.Cog):
     @app_commands.guilds(MY_GUILD)
     async def setup_tickets(self, interaction: discord.Interaction, image_url: str = None):
         embed = discord.Embed(
-            title="مركز الدعم الفني والمساعدة",
+            title="Echo",
             description="مرحباً بك في مركز الدعم.\nيرجى اختيار نوع التذكرة التي ترغب بفتحها من القائمة بالأسفل.",
             color=discord.Color.dark_theme()
         )
