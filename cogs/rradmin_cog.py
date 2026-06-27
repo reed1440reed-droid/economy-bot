@@ -18,7 +18,7 @@ class AdminTools(commands.Cog):
    
 
     # مسح
-    @app_commands.command(name="purge", description="مسح عدد من الرسائل")
+    @app_commands.command(name="clear", description="مسح عدد من الرسائل")
     @app_commands.checks.has_permissions(manage_messages=True)
     async def purge(self, interaction: discord.Interaction, amount: int):
         await interaction.channel.purge(limit=amount)
