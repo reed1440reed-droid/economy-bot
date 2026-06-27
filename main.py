@@ -28,6 +28,12 @@ async def on_ready():
 
 # دالة لتحميل الكوجات تلقائياً
 async def load_extensions():
+    # التحقق من وجود المجلد، وإذا مو موجود يقوم البوت بإنشائه تلقائياً
+    if not os.path.exists('./cogs'):
+        os.makedirs('./cogs')
+        print("📁 تم إنشاء مجلد 'cogs' تلقائياً لأنك نسيته!")
+        return # نوقف الدالة هنا لأن المجلد توه جديد وأكيد بيكون فارغ
+
     # يبحث داخل مجلد cogs
     for filename in os.listdir('./cogs'):
         # الشرط: يحمل فقط الملفات التي تنتهي بـ _cog.py
