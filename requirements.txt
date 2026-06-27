@@ -10,3 +10,4 @@ pymongo
 Pillow          
 requests       
 yt-dlp
+chat-exporter
