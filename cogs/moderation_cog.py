@@ -3,7 +3,7 @@ from discord.ext import commands
 from discord import app_commands
 import datetime
 
-# ⚠️ ضع آيدي سيرفرك هنا عشان تتفعل الأوامر فيه فوراً وبدون انتظار
+# ⚠️ آيدي سيرفرك
 MY_GUILD = discord.Object(id=1439839910172295303) 
 
 class Moderation(commands.Cog):
@@ -13,16 +13,22 @@ class Moderation(commands.Cog):
     # 1. أمر الحظر (Ban)
     @app_commands.command(name="ban", description="حظر عضو من السيرفر نهائياً")
     @app_commands.describe(member="العضو المراد حظره", reason="سبب الحظر")
-    @app_commands.default_permissions(ban_members=True) # الأمر يظهر فقط لمن لديه صلاحية الباند
-    @app_commands.guilds(MY_GUILD) # ربط الأمر بالسيرفر للظهور السريع
+    @app_commands.default_permissions(ban_members=True) 
+    @app_commands.guilds(MY_GUILD) 
     async def ban(self, interaction: discord.Interaction, member: discord.Member, reason: str = "بدون سبب"):
-        # حماية: منع حظر شخص رتبته أعلى أو مساوية لمنفذ الأمر
         if member.top_role >= interaction.user.top_role and interaction.user.id != interaction.guild.owner_id:
             return await interaction.response.send_message("❌ لا يمكنك حظر شخص رتبته أعلى أو مساوية لك!", ephemeral=True)
         
         try:
+            # محاولة إرسال رسالة في الخاص للعضو قبل حظره
+            try:
+                await member.send(f"🔨 لقد تم حظرك من سيرفر **{interaction.guild.name}**.\n📄 **السبب:** {reason}")
+            except discord.Forbidden:
+                pass # يتجاهل الخطأ إذا كان العضو مقفل الخاص
+
             await member.ban(reason=reason)
-            await interaction.response.send_message(f"🔨 تم حظر {member.mention} بنجاح.\n📄 **السبب:** {reason}")
+            # إرسال تأكيد مخفي للمشرف فقط
+            await interaction.response.send_message(f"✅ تم حظر {member.mention} بنجاح وتمت محاولة إبلاغه بالخاص.", ephemeral=True)
         except discord.Forbidden:
             await interaction.response.send_message("❌ البوت لا يملك صلاحية (أو رتبته أقل من العضو) لتنفيذ الحظر.", ephemeral=True)
 
@@ -36,8 +42,13 @@ class Moderation(commands.Cog):
             return await interaction.response.send_message("❌ لا يمكنك طرد شخص رتبته أعلى أو مساوية لك!", ephemeral=True)
         
         try:
+            try:
+                await member.send(f"👢 لقد تم طردك من سيرفر **{interaction.guild.name}**.\n📄 **السبب:** {reason}")
+            except discord.Forbidden:
+                pass
+
             await member.kick(reason=reason)
-            await interaction.response.send_message(f"👢 تم طرد {member.mention} بنجاح.\n📄 **السبب:** {reason}")
+            await interaction.response.send_message(f"✅ تم طرد {member.mention} بنجاح وتمت محاولة إبلاغه بالخاص.", ephemeral=True)
         except discord.Forbidden:
             await interaction.response.send_message("❌ البوت لا يملك صلاحية لطرد هذا العضو.", ephemeral=True)
 
@@ -51,10 +62,15 @@ class Moderation(commands.Cog):
             return await interaction.response.send_message("❌ لا يمكنك إعطاء تايم اوت لشخص رتبته أعلى أو مساوية لك!", ephemeral=True)
         
         try:
-            # تحويل الدقائق إلى صيغة وقت يفهمها الديسكورد
             duration = datetime.timedelta(minutes=minutes)
+            
+            try:
+                await member.send(f"⏳ تم إعطاؤك تايم اوت في سيرفر **{interaction.guild.name}** لمدة {minutes} دقيقة.\n📄 **السبب:** {reason}")
+            except discord.Forbidden:
+                pass
+
             await member.timeout(duration, reason=reason)
-            await interaction.response.send_message(f"⏳ تم إسكات {member.mention} لمدة **{minutes} دقيقة**.\n📄 **السبب:** {reason}")
+            await interaction.response.send_message(f"✅ تم إسكات {member.mention} لمدة **{minutes} دقيقة** (الرسالة مخفية عن الأعضاء).", ephemeral=True)
         except discord.Forbidden:
             await interaction.response.send_message("❌ البوت لا يملك صلاحية إعطاء تايم اوت لهذا العضو.", ephemeral=True)
 
