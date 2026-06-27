@@ -9,3 +9,4 @@ asyncpg
 pymongo         
 Pillow          
 requests       
+yt-dlp
