@@ -4,7 +4,7 @@ from discord import app_commands
 import datetime
 
 # ⚠️ ضع آيدي سيرفرك هنا عشان تتفعل الأوامر فيه فوراً وبدون انتظار
-MY_GUILD = discord.Object(id=123456789012345678) 
+MY_GUILD = discord.Object(id=1439839910172295303) 
 
 class Moderation(commands.Cog):
     def __init__(self, bot):
