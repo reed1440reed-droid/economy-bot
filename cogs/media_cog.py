@@ -41,7 +41,9 @@ class LinkModal(discord.ui.Modal, title="أدخل الرابط لتحميل ال
             'outtmpl': 'downloads/%(id)s.%(ext)s',
             'quiet': True,
             'no_warnings': True,
-            'noplaylist': True
+            'noplaylist': True,
+            # هذا السطر هو "الخداع" الذي يحتاجه يوتيوب ليظن أنك متصفح حقيقي
+            'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
         }
         
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
